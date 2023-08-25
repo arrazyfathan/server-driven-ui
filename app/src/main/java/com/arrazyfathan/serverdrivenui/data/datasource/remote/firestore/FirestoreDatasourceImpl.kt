@@ -2,6 +2,8 @@ package com.arrazyfathan.serverdrivenui.data.datasource.remote.firestore
 
 import com.arrazyfathan.serverdrivenui.data.datasource.model.CardUi
 import com.arrazyfathan.serverdrivenui.utils.Constants
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.channels.awaitClose
@@ -17,22 +19,25 @@ class FirestoreDatasourceImpl @Inject constructor(
 ) : FirestoreDatasource {
 
     override suspend fun getCardUi(): Flow<FirestoreResult<CardUi?>> = callbackFlow {
-        val listener =
-            firestore.collection(Constants.CARD_UI_COLLECTION).document(Constants.CARD_DOCUMENT)
-                .addSnapshotListener { snapshot, e ->
-                    if (e != null) {
-                        trySend(FirestoreResult.Failure(e))
-                        return@addSnapshotListener
-                    }
+        val listener = EventListener<DocumentSnapshot> { snapshot, error ->
+            if (error != null) {
+                trySend(FirestoreResult.Failure(error))
+                // cancel() or cancel
+                return@EventListener
+            }
 
-                    if (snapshot != null && snapshot.exists()) {
-                        val card = snapshot.toObject<CardUi>()
-                        trySend(FirestoreResult.Success(card))
-                    } else {
-                        trySend(FirestoreResult.Failure(Exception("Snapshot is not exist")))
-                    }
-                }
+            if (snapshot != null && snapshot.exists()) {
+                val card = snapshot.toObject<CardUi>()
+                trySend(FirestoreResult.Success(card))
+            } else {
+                trySend(FirestoreResult.Failure(Exception("Snapshot is not exist")))
+            }
+        }
+        val registration = firestore
+            .collection(Constants.HOME_SCREEN_COLLECTION)
+            .document(Constants.HOME_CARD)
+            .addSnapshotListener(listener)
 
-        awaitClose { listener.remove() }
+        awaitClose { registration.remove() }
     }
 }

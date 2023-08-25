@@ -5,6 +5,6 @@ package com.arrazyfathan.serverdrivenui.utils
  */
 object Constants {
 
-    const val CARD_UI_COLLECTION = "card_ui"
-    const val CARD_DOCUMENT = "card"
+    const val HOME_SCREEN_COLLECTION = "home_screen"
+    const val HOME_CARD = "card"
 }

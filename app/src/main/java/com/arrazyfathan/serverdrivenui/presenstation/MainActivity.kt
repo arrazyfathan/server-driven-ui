@@ -3,6 +3,10 @@ package com.arrazyfathan.serverdrivenui.presenstation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Surface
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -23,7 +27,12 @@ class MainActivity : ComponentActivity() {
         setContent {
             ServerDrivenUITheme {
                 val viewModel = hiltViewModel<HomeViewModel>()
-                HomeScreen(viewModel)
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = Color.Black
+                ) {
+                    HomeScreen(viewModel)
+                }
             }
         }
     }
