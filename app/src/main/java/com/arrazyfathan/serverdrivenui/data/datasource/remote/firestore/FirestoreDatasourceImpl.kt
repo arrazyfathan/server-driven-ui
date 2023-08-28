@@ -1,6 +1,7 @@
 package com.arrazyfathan.serverdrivenui.data.datasource.remote.firestore
 
-import com.arrazyfathan.serverdrivenui.data.datasource.model.CardUi
+import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
+import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
 import com.arrazyfathan.serverdrivenui.utils.Constants
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.EventListener
@@ -18,7 +19,7 @@ class FirestoreDatasourceImpl @Inject constructor(
     private val firestore: FirebaseFirestore,
 ) : FirestoreDatasource {
 
-    override suspend fun getCardUi(): Flow<FirestoreResult<CardUi?>> = callbackFlow {
+    override suspend fun getTopAppBarUi(): Flow<FirestoreResult<TopAppBarUi?>> = callbackFlow {
         val listener = EventListener<DocumentSnapshot> { snapshot, error ->
             if (error != null) {
                 trySend(FirestoreResult.Failure(error))
@@ -27,17 +28,41 @@ class FirestoreDatasourceImpl @Inject constructor(
             }
 
             if (snapshot != null && snapshot.exists()) {
-                val card = snapshot.toObject<CardUi>()
-                trySend(FirestoreResult.Success(card))
+                val data = snapshot.toObject<TopAppBarUi>()
+                trySend(FirestoreResult.Success(data))
             } else {
                 trySend(FirestoreResult.Failure(Exception("Snapshot is not exist")))
             }
         }
         val registration = firestore
             .collection(Constants.HOME_SCREEN_COLLECTION)
-            .document(Constants.HOME_CARD)
+            .document(Constants.TOP_APP_BAR)
             .addSnapshotListener(listener)
 
         awaitClose { registration.remove() }
     }
+
+    override suspend fun getFeaturedImageUi(): Flow<FirestoreResult<FeaturedImageUi?>> =
+        callbackFlow {
+            val listener = EventListener<DocumentSnapshot> { snapshot, error ->
+                if (error != null) {
+                    trySend(FirestoreResult.Failure(error))
+                    // cancel() or cancel
+                    return@EventListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    val data = snapshot.toObject<FeaturedImageUi>()
+                    trySend(FirestoreResult.Success(data))
+                } else {
+                    trySend(FirestoreResult.Failure(Exception("Snapshot is not exist")))
+                }
+            }
+            val registration = firestore
+                .collection(Constants.HOME_SCREEN_COLLECTION)
+                .document(Constants.FEATURED_IMAGE)
+                .addSnapshotListener(listener)
+
+            awaitClose { registration.remove() }
+        }
 }

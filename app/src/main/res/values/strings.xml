@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Server Driven UI</string>
+
+    <string name="example_article_content">
+        Thomas Tuchel was given the job of reviving Chelsea at the end of January, he wanted to return them to next season’s Champions League via a top-four Premier League finish. The notion that he might actually win the thing for only the second time in the club’s history was ludicrous.
+        \n
+        \n
+        Not any more. On a night of glory for him and his team, the manager applied the final brush strokes to his renaissance masterpiece, out-manoeuvring his friend and rival, Pep Guardiola, and watching Kai Havertz score the decisive goal just before half-time.
+        \n
+        \n
+        Chelsea defended like demons to snuff out Manchester City but this was a perfectly calibrated triumph, built upon a structured attacking approach, choosing the right moments to transition, and illuminated by the smoothness of Havertz’s technique.
+        At the end, after the seven minutes of stoppage time had expired, with Riyad Mahrez having lifted a shot just off target for City with practically the last kick, and as the players in dark blue were overtaken by wide-eyed wonder, by the adrenaline main-lining their systems, Tuchel was relatively calm, trying to take it all in.
+        \n
+        \n
+        At the end of last season, Tuchel had been on the losing side in Europe’s showpiece final when his Paris Saint-Germain team were edged out by Bayern Munich. Perhaps the pain made this even sweeter.
+        \n
+        \n
+        What is irrefutable is how virtually everything Tuchel has touched since taking over from Frank Lampard has turned to gold. There has been the successful switch to a back three, which was plotted on the flight over from Paris on the day before his first game – his team have kept 19 clean sheets in 30 matches in all competitions – and the rise up from ninth in the league to the goal of fourth.
+    </string>
 </resources>

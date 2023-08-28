@@ -2,7 +2,6 @@ package com.arrazyfathan.serverdrivenui.presenstation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.arrazyfathan.serverdrivenui.data.datasource.model.CardUi
 import com.arrazyfathan.serverdrivenui.data.datasource.remote.Resources
 import com.arrazyfathan.serverdrivenui.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,26 +20,50 @@ class HomeViewModel @Inject constructor(
     private val repository: Repository,
 ) : ViewModel() {
 
-    private val _cardUiState = MutableStateFlow(CardUiState())
-    val cardUiState: StateFlow<CardUiState> get() = _cardUiState
+    private val _topAppBarUiState = MutableStateFlow(TopAppBarUiState())
+    val topAppBarUiState: StateFlow<TopAppBarUiState> get() = _topAppBarUiState
+
+    private val _featuredImageUiState = MutableStateFlow(FeaturedImageUiState())
+    val featuredImageUiState: StateFlow<FeaturedImageUiState> get() = _featuredImageUiState
 
     init {
-        getCardUi()
+        getTopAppBarUi()
+        getFeaturedImageUi()
     }
 
-    private fun getCardUi() {
+    private fun getTopAppBarUi() {
         viewModelScope.launch {
-            repository.getCardUi().collect { resources ->
+            repository.getTopAppBarUi().collect { resources ->
                 when (resources) {
                     is Resources.Success -> {
-                        _cardUiState.update {
-                            CardUiState(resources.data)
+                        _topAppBarUiState.update {
+                            TopAppBarUiState(resources.data)
                         }
                     }
 
                     is Resources.Failure -> {
-                        _cardUiState.update {
-                            CardUiState(null, resources.exception.message)
+                        _topAppBarUiState.update {
+                            TopAppBarUiState(null, resources.exception.message)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getFeaturedImageUi() {
+        viewModelScope.launch {
+            repository.getFeaturedImageUi().collect { resources ->
+                when (resources) {
+                    is Resources.Success -> {
+                        _featuredImageUiState.update {
+                            FeaturedImageUiState(resources.data)
+                        }
+                    }
+
+                    is Resources.Failure -> {
+                        _featuredImageUiState.update {
+                            FeaturedImageUiState(null, resources.exception.message)
                         }
                     }
                 }

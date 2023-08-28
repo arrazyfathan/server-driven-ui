@@ -98,4 +98,7 @@ dependencies {
 
     // Swipe Refresh
     implementation("com.google.accompanist:accompanist-swiperefresh:0.30.1")
+
+    // Text Flow
+    implementation("io.github.oleksandrbalan:textflow:1.1.1")
 }
