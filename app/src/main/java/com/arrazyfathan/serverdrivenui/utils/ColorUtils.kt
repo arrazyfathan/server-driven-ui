@@ -14,6 +14,7 @@ object ColorUtils {
             "black" -> Color.Black
             "blue" -> Color.Blue
             "yellow" -> Color.Yellow
+            "white" -> Color.White
             else -> Color.White
         }
     }

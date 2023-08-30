@@ -1,5 +1,6 @@
 package com.arrazyfathan.serverdrivenui.data.datasource
 
+import com.arrazyfathan.serverdrivenui.data.datasource.model.ContentUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
 import com.arrazyfathan.serverdrivenui.data.datasource.remote.Resources
@@ -39,6 +40,22 @@ class RepositoryImpl @Inject constructor(
     override fun getFeaturedImageUi(): Flow<Resources<FeaturedImageUi?>> {
         return flow {
             firestoreDatasource.getFeaturedImageUi().collect { result ->
+                try {
+                    when (result) {
+                        is FirestoreResult.Success -> emit(Resources.Success(result.data))
+
+                        is FirestoreResult.Failure -> emit(Resources.Failure(result.exception))
+                    }
+                } catch (e: Exception) {
+                    emit(Resources.Failure(e))
+                }
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override fun getContent(): Flow<Resources<ContentUi?>> {
+        return flow {
+            firestoreDatasource.getContentUi().collect { result ->
                 try {
                     when (result) {
                         is FirestoreResult.Success -> emit(Resources.Success(result.data))

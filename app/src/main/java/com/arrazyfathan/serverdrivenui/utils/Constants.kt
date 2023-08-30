@@ -9,6 +9,7 @@ object Constants {
     const val HOME_CARD = "card"
     const val TOP_APP_BAR = "top_app_bar"
     const val FEATURED_IMAGE = "featured_image"
+    const val CONTENT = "content"
 
     var DEFAULT_IMAGE_URL =
         "https://img.chelseafc.com/image/upload/f_auto,c_fill,g_faces,w_1440,h_856,q_90/editorial/news/2022/06/05/club-world-cup-trophy-lift.jpg"

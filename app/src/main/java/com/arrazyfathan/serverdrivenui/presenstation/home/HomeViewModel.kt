@@ -7,6 +7,7 @@ import com.arrazyfathan.serverdrivenui.domain.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,9 +27,13 @@ class HomeViewModel @Inject constructor(
     private val _featuredImageUiState = MutableStateFlow(FeaturedImageUiState())
     val featuredImageUiState: StateFlow<FeaturedImageUiState> get() = _featuredImageUiState
 
+    private val _contentUiState = MutableStateFlow(ArticleContentUiState())
+    val contentUiState = _contentUiState.asStateFlow()
+
     init {
         getTopAppBarUi()
         getFeaturedImageUi()
+        getContentUi()
     }
 
     private fun getTopAppBarUi() {
@@ -64,6 +69,26 @@ class HomeViewModel @Inject constructor(
                     is Resources.Failure -> {
                         _featuredImageUiState.update {
                             FeaturedImageUiState(null, resources.exception.message)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun getContentUi() {
+        viewModelScope.launch {
+            repository.getContent().collect { resources ->
+                when (resources) {
+                    is Resources.Success -> {
+                        _contentUiState.update {
+                            ArticleContentUiState(resources.data)
+                        }
+                    }
+
+                    is Resources.Failure -> {
+                        _contentUiState.update {
+                            ArticleContentUiState(null, resources.exception.message)
                         }
                     }
                 }

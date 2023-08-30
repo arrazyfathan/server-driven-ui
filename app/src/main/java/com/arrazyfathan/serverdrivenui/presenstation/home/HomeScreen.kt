@@ -48,16 +48,14 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.arrazyfathan.serverdrivenui.R
 import com.arrazyfathan.serverdrivenui.presenstation.components.ChipText
+import com.arrazyfathan.serverdrivenui.presenstation.components.ExpandingText
 import com.arrazyfathan.serverdrivenui.presenstation.components.pressClickEffect
 import com.arrazyfathan.serverdrivenui.presenstation.ui.theme.GoloSansRegular
 import com.arrazyfathan.serverdrivenui.presenstation.ui.theme.GoloSansSemiBold
-import com.arrazyfathan.serverdrivenui.presenstation.ui.theme.GoloSansSemiMedium
 import com.arrazyfathan.serverdrivenui.utils.ColorUtils.getColorFromString
 import com.arrazyfathan.serverdrivenui.utils.Constants.DEFAULT_IMAGE_CAPTION
 import com.arrazyfathan.serverdrivenui.utils.Constants.DEFAULT_IMAGE_TITLE
 import com.arrazyfathan.serverdrivenui.utils.Constants.DEFAULT_IMAGE_URL
-import eu.wewox.textflow.TextFlow
-import eu.wewox.textflow.TextFlowObstacleAlignment
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -66,6 +64,7 @@ fun HomeScreen(
 ) {
     val topAppBarUiState by viewModel.topAppBarUiState.collectAsState()
     val featuredImageUiState by viewModel.featuredImageUiState.collectAsState()
+    val contentUiState by viewModel.contentUiState.collectAsState()
 
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState()
@@ -93,39 +92,32 @@ fun HomeScreen(
                 color = Color.White.copy(alpha = 0.3f),
                 thickness = 0.5.dp,
             )
-            ArticleContent()
+            ArticleContent(contentUiState)
         }
     }
 }
 
 @Composable
 fun ArticleContent(
-   // articleContentUiState: ArticleContentUiState,
+    articleContentUiState: ArticleContentUiState,
 ) {
     var textSize by remember { mutableStateOf(14) }
+    var textAlign by remember { mutableStateOf("start") }
+    var textColor by remember { mutableStateOf("white") }
 
-    /*if (articleContentUiState.data != null) {
-    }*/
+    if (articleContentUiState.data != null) {
+        textSize = articleContentUiState.data.textSize
+        textAlign = articleContentUiState.data.textAlign
+        textColor = articleContentUiState.data.textColor
+    }
 
     val exampleArticle = stringResource(id = R.string.example_article_content)
-    TextFlow(
-        text = exampleArticle.substring(1),
+    ExpandingText(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
-        color = Color.White,
-        fontFamily = GoloSansRegular,
-        fontSize = textSize.sp,
-        lineHeight = 18.sp,
-        textAlign = TextAlign.Justify,
-        obstacleAlignment = TextFlowObstacleAlignment.TopStart,
-        obstacleContent = {
-            Text(
-                text = exampleArticle[0].toString(),
-                modifier = Modifier.padding(end = 4.dp),
-                color = Color.White,
-                fontFamily = GoloSansSemiMedium,
-                fontSize = 40.sp,
-            )
-        },
+        text = exampleArticle,
+        textSize = textSize,
+        textAlign = textAlign,
+        textColor = textColor,
     )
 }
 

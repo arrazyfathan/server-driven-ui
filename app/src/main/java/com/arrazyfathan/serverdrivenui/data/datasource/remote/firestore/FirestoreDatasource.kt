@@ -1,5 +1,6 @@
 package com.arrazyfathan.serverdrivenui.data.datasource.remote.firestore
 
+import com.arrazyfathan.serverdrivenui.data.datasource.model.ContentUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
 import kotlinx.coroutines.flow.Flow
@@ -10,4 +11,5 @@ import kotlinx.coroutines.flow.Flow
 interface FirestoreDatasource {
     suspend fun getTopAppBarUi(): Flow<FirestoreResult<TopAppBarUi?>>
     suspend fun getFeaturedImageUi(): Flow<FirestoreResult<FeaturedImageUi?>>
+    suspend fun getContentUi(): Flow<FirestoreResult<ContentUi?>>
 }
