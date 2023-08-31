@@ -1,5 +1,6 @@
 package com.arrazyfathan.serverdrivenui.data.datasource.remote.firestore
 
+import com.arrazyfathan.serverdrivenui.data.datasource.model.CardLinksUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.ContentUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
@@ -12,4 +13,5 @@ interface FirestoreDatasource {
     suspend fun getTopAppBarUi(): Flow<FirestoreResult<TopAppBarUi?>>
     suspend fun getFeaturedImageUi(): Flow<FirestoreResult<FeaturedImageUi?>>
     suspend fun getContentUi(): Flow<FirestoreResult<ContentUi?>>
+    suspend fun getCardLinksUi(): Flow<FirestoreResult<CardLinksUi?>>
 }

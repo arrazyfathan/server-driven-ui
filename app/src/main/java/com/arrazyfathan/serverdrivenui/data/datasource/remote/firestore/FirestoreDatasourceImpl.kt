@@ -1,5 +1,6 @@
 package com.arrazyfathan.serverdrivenui.data.datasource.remote.firestore
 
+import com.arrazyfathan.serverdrivenui.data.datasource.model.CardLinksUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.ContentUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
@@ -86,6 +87,30 @@ class FirestoreDatasourceImpl @Inject constructor(
             val registration = firestore
                 .collection(Constants.HOME_SCREEN_COLLECTION)
                 .document(Constants.CONTENT)
+                .addSnapshotListener(listener)
+
+            awaitClose { registration.remove() }
+        }
+
+    override suspend fun getCardLinksUi(): Flow<FirestoreResult<CardLinksUi?>> =
+        callbackFlow {
+            val listener = EventListener<DocumentSnapshot> { snapshot, error ->
+                if (error != null) {
+                    trySend(FirestoreResult.Failure(error))
+                    // cancel() or cancel
+                    return@EventListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    val data = snapshot.toObject<CardLinksUi>()
+                    trySend(FirestoreResult.Success(data))
+                } else {
+                    trySend(FirestoreResult.Failure(Exception("Snapshot is not exist")))
+                }
+            }
+            val registration = firestore
+                .collection(Constants.HOME_SCREEN_COLLECTION)
+                .document(Constants.CARD_LINKS)
                 .addSnapshotListener(listener)
 
             awaitClose { registration.remove() }

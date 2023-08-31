@@ -101,4 +101,6 @@ dependencies {
 
     // Text Flow
     implementation("io.github.oleksandrbalan:textflow:1.1.1")
+
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
 }

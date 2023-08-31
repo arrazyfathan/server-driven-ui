@@ -2,7 +2,9 @@ package com.arrazyfathan.serverdrivenui.presenstation.home
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
@@ -18,7 +20,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.Card
+import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -42,13 +47,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.arrazyfathan.serverdrivenui.R
 import com.arrazyfathan.serverdrivenui.presenstation.components.ChipText
 import com.arrazyfathan.serverdrivenui.presenstation.components.ExpandingText
+import com.arrazyfathan.serverdrivenui.presenstation.components.bounceClick
 import com.arrazyfathan.serverdrivenui.presenstation.components.pressClickEffect
 import com.arrazyfathan.serverdrivenui.presenstation.ui.theme.GoloSansRegular
 import com.arrazyfathan.serverdrivenui.presenstation.ui.theme.GoloSansSemiBold
@@ -65,6 +74,7 @@ fun HomeScreen(
     val topAppBarUiState by viewModel.topAppBarUiState.collectAsState()
     val featuredImageUiState by viewModel.featuredImageUiState.collectAsState()
     val contentUiState by viewModel.contentUiState.collectAsState()
+    val cardLinksUiState by viewModel.cardLinksUiState.collectAsState()
 
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState()
@@ -93,6 +103,128 @@ fun HomeScreen(
                 thickness = 0.5.dp,
             )
             ArticleContent(contentUiState)
+            BottomLink(cardLinksUiState)
+        }
+    }
+}
+
+@Composable
+fun BottomLink(
+    cardLinksUiState: CardLinksUiState,
+) {
+    var cornerRadius by remember { mutableStateOf(8) }
+    var cardBackgroundColor by remember { mutableStateOf("black") }
+    var cardBorderSize by remember { mutableStateOf(0.5) }
+    var cardBorderColor by remember { mutableStateOf("white") }
+    var imageLinksSize by remember { mutableStateOf(40) }
+    var imageLinksCornerRadius by remember { mutableStateOf(4) }
+    var linksTitle by remember { mutableStateOf("2022: The year we completed the set") }
+    var linksTextColor by remember { mutableStateOf("white") }
+    var linksTextSize by remember { mutableStateOf(11) }
+    var linkLabel by remember { mutableStateOf("OPEN LINKS") }
+    var linkLabelTextColor by remember { mutableStateOf("white") }
+    var linkLabelTextSize by remember { mutableStateOf(11) }
+    var iconShareSize by remember { mutableStateOf(20) }
+    var iconShareTint by remember { mutableStateOf("white") }
+
+    if (cardLinksUiState.data != null) {
+        cornerRadius = cardLinksUiState.data.cornerRadius
+        cardBackgroundColor = cardLinksUiState.data.cardBackgroundColor
+        cardBorderSize = cardLinksUiState.data.cardBorderSize
+        cardBorderColor = cardLinksUiState.data.cardBorderColor
+        imageLinksSize = cardLinksUiState.data.imageLinksSize
+        imageLinksCornerRadius = cardLinksUiState.data.imageLinksCornerRadius
+        linksTitle = cardLinksUiState.data.linksTitle
+        linksTextColor = cardLinksUiState.data.linksTextColor
+        linksTextSize = cardLinksUiState.data.linkTextSize
+        linkLabel = cardLinksUiState.data.linkLabel
+        linkLabelTextColor = cardLinksUiState.data.linkLabelTextColor
+        linkLabelTextSize = cardLinksUiState.data.linkLabelTextSize
+        iconShareSize = cardLinksUiState.data.iconShareSize
+        iconShareTint = cardLinksUiState.data.iconShareTint
+    }
+
+    Card(
+        elevation = 0.dp,
+        shape = RoundedCornerShape(cornerRadius.dp),
+        backgroundColor = getColorFromString(cardBackgroundColor),
+        border = BorderStroke(
+            cardBorderSize.dp,
+            getColorFromString(cardBorderColor).copy(alpha = 0.3f),
+        ),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, start = 16.dp, end = 16.dp, bottom = 34.dp)
+            .bounceClick()
+            .clickable { },
+    ) {
+        ConstraintLayout(
+            modifier = Modifier
+                .padding(10.dp),
+        ) {
+            val (image, content, icon) = createRefs()
+
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(DEFAULT_IMAGE_URL)
+                    .crossfade(true)
+                    .build(),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(imageLinksSize.dp)
+                    .clip(RoundedCornerShape(imageLinksCornerRadius.dp))
+                    .constrainAs(image) {
+                        start.linkTo(parent.start)
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                    },
+            )
+
+            Column(
+                modifier = Modifier
+                    .constrainAs(content) {
+                        top.linkTo(image.top)
+                        bottom.linkTo(image.bottom)
+                        start.linkTo(image.end, 8.dp)
+                        end.linkTo(icon.start, 16.dp)
+                        width = Dimension.fillToConstraints
+                    },
+            ) {
+                Text(
+                    text = linkLabel,
+                    color = getColorFromString(linkLabelTextColor),
+                    fontSize = linkLabelTextSize.sp,
+                    fontFamily = GoloSansSemiBold,
+                )
+                Text(
+                    text = linksTitle,
+                    color = getColorFromString(linksTextColor),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = linksTextSize.sp,
+                    fontFamily = GoloSansRegular,
+                )
+            }
+
+            IconButton(
+                onClick = { },
+                modifier = Modifier
+                    .constrainAs(icon) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                        height = Dimension.preferredWrapContent
+                    },
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_external_link),
+                    contentDescription = null,
+                    tint = getColorFromString(iconShareTint),
+                    modifier = Modifier
+                        .size(iconShareSize.dp),
+                )
+            }
         }
     }
 }
@@ -104,11 +236,13 @@ fun ArticleContent(
     var textSize by remember { mutableStateOf(14) }
     var textAlign by remember { mutableStateOf("start") }
     var textColor by remember { mutableStateOf("white") }
+    var collapsedMaxLines by remember { mutableStateOf(14) }
 
     if (articleContentUiState.data != null) {
         textSize = articleContentUiState.data.textSize
         textAlign = articleContentUiState.data.textAlign
         textColor = articleContentUiState.data.textColor
+        collapsedMaxLines = articleContentUiState.data.collapsedMaxLines
     }
 
     val exampleArticle = stringResource(id = R.string.example_article_content)
@@ -118,6 +252,7 @@ fun ArticleContent(
         textSize = textSize,
         textAlign = textAlign,
         textColor = textColor,
+        collapsedMaxLines = collapsedMaxLines,
     )
 }
 

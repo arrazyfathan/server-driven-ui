@@ -17,4 +17,8 @@ data class ContentUi(
     @get:PropertyName("text_size")
     @PropertyName("text_size")
     val textSize: Int = 0,
+
+    @get:PropertyName("collapsed_max_lines")
+    @PropertyName("collapsed_max_lines")
+    val collapsedMaxLines: Int = 0,
 )

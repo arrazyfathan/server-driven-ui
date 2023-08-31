@@ -1,5 +1,6 @@
 package com.arrazyfathan.serverdrivenui.domain.repository
 
+import com.arrazyfathan.serverdrivenui.data.datasource.model.CardLinksUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.ContentUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
@@ -13,4 +14,5 @@ interface Repository {
     fun getTopAppBarUi(): Flow<Resources<TopAppBarUi?>>
     fun getFeaturedImageUi(): Flow<Resources<FeaturedImageUi?>>
     fun getContent(): Flow<Resources<ContentUi?>>
+    fun getCardLinksUi(): Flow<Resources<CardLinksUi?>>
 }
