@@ -33,11 +33,35 @@ class HomeViewModel @Inject constructor(
     private val _cardLinksUiState = MutableStateFlow(CardLinksUiState())
     val cardLinksUiState = _cardLinksUiState.asStateFlow()
 
+    private val _footerUiState = MutableStateFlow(FooterUiState())
+    val footerUiState = _footerUiState.asStateFlow()
+
     init {
         getTopAppBarUi()
         getFeaturedImageUi()
         getContentUi()
         getCardLinksUi()
+        getFooterUi()
+    }
+
+    private fun getFooterUi() {
+        viewModelScope.launch {
+            repository.getFooterUi().collect { resources ->
+                when (resources) {
+                    is Resources.Success -> {
+                        _footerUiState.update {
+                            FooterUiState(resources.data)
+                        }
+                    }
+
+                    is Resources.Failure -> {
+                        _footerUiState.update {
+                            FooterUiState(null, resources.exception.message)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun getCardLinksUi() {

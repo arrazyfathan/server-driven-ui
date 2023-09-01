@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
-import androidx.compose.material3.Card
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -55,6 +54,7 @@ import androidx.constraintlayout.compose.Dimension
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.arrazyfathan.serverdrivenui.R
+import com.arrazyfathan.serverdrivenui.presenstation.components.BasicCarousel
 import com.arrazyfathan.serverdrivenui.presenstation.components.ChipText
 import com.arrazyfathan.serverdrivenui.presenstation.components.ExpandingText
 import com.arrazyfathan.serverdrivenui.presenstation.components.bounceClick
@@ -75,6 +75,7 @@ fun HomeScreen(
     val featuredImageUiState by viewModel.featuredImageUiState.collectAsState()
     val contentUiState by viewModel.contentUiState.collectAsState()
     val cardLinksUiState by viewModel.cardLinksUiState.collectAsState()
+    val footerUiState by viewModel.footerUiState.collectAsState()
 
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed = interactionSource.collectIsPressedAsState()
@@ -103,7 +104,7 @@ fun HomeScreen(
                 thickness = 0.5.dp,
             )
             ArticleContent(contentUiState)
-            BottomLink(cardLinksUiState)
+            Footer(cardLinksUiState, footerUiState)
         }
     }
 }
@@ -247,7 +248,9 @@ fun ArticleContent(
 
     val exampleArticle = stringResource(id = R.string.example_article_content)
     ExpandingText(
-        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         text = exampleArticle,
         textSize = textSize,
         textAlign = textAlign,
@@ -424,6 +427,28 @@ fun TopAppBar(
                         .size(iconSize.dp),
                 )
             }
+        }
+    }
+}
+
+@Composable
+fun Footer(
+    cardLinksUiState: CardLinksUiState,
+    footerUiState: FooterUiState,
+) {
+    var componentType by remember { mutableStateOf("card_link") }
+
+    if (footerUiState.data != null) {
+        componentType = footerUiState.data.componentType
+    }
+
+    when (componentType) {
+        "card_link" -> {
+            BottomLink(cardLinksUiState)
+        }
+
+        "carousel" -> {
+            BasicCarousel()
         }
     }
 }

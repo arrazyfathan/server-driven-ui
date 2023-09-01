@@ -3,6 +3,7 @@ package com.arrazyfathan.serverdrivenui.domain.repository
 import com.arrazyfathan.serverdrivenui.data.datasource.model.CardLinksUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.ContentUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
+import com.arrazyfathan.serverdrivenui.data.datasource.model.FooterUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
 import com.arrazyfathan.serverdrivenui.data.datasource.remote.Resources
 import kotlinx.coroutines.flow.Flow
@@ -15,4 +16,5 @@ interface Repository {
     fun getFeaturedImageUi(): Flow<Resources<FeaturedImageUi?>>
     fun getContent(): Flow<Resources<ContentUi?>>
     fun getCardLinksUi(): Flow<Resources<CardLinksUi?>>
+    fun getFooterUi(): Flow<Resources<FooterUi?>>
 }

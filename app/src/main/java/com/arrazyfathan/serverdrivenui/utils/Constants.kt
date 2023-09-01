@@ -11,6 +11,7 @@ object Constants {
     const val FEATURED_IMAGE = "featured_image"
     const val CONTENT = "content"
     const val CARD_LINKS = "card_links"
+    const val FOOTER = "footer"
 
     var DEFAULT_IMAGE_URL =
         "https://www.getfootballnewsfrance.com/assets/manchester-city-v-chelsea-fc-uefa-champions-league-final-scaled.jpg"

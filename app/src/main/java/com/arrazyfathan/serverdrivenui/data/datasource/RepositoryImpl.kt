@@ -3,6 +3,7 @@ package com.arrazyfathan.serverdrivenui.data.datasource
 import com.arrazyfathan.serverdrivenui.data.datasource.model.CardLinksUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.ContentUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
+import com.arrazyfathan.serverdrivenui.data.datasource.model.FooterUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
 import com.arrazyfathan.serverdrivenui.data.datasource.remote.Resources
 import com.arrazyfathan.serverdrivenui.data.datasource.remote.firestore.FirestoreDatasource
@@ -73,6 +74,22 @@ class RepositoryImpl @Inject constructor(
     override fun getCardLinksUi(): Flow<Resources<CardLinksUi?>> {
         return flow {
             firestoreDatasource.getCardLinksUi().collect { result ->
+                try {
+                    when (result) {
+                        is FirestoreResult.Success -> emit(Resources.Success(result.data))
+
+                        is FirestoreResult.Failure -> emit(Resources.Failure(result.exception))
+                    }
+                } catch (e: Exception) {
+                    emit(Resources.Failure(e))
+                }
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override fun getFooterUi(): Flow<Resources<FooterUi?>> {
+        return flow {
+            firestoreDatasource.getFooterUi().collect { result ->
                 try {
                     when (result) {
                         is FirestoreResult.Success -> emit(Resources.Success(result.data))

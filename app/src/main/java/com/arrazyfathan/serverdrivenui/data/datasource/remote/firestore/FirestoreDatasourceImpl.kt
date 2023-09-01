@@ -3,6 +3,7 @@ package com.arrazyfathan.serverdrivenui.data.datasource.remote.firestore
 import com.arrazyfathan.serverdrivenui.data.datasource.model.CardLinksUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.ContentUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.FeaturedImageUi
+import com.arrazyfathan.serverdrivenui.data.datasource.model.FooterUi
 import com.arrazyfathan.serverdrivenui.data.datasource.model.TopAppBarUi
 import com.arrazyfathan.serverdrivenui.utils.Constants
 import com.google.firebase.firestore.DocumentSnapshot
@@ -111,6 +112,30 @@ class FirestoreDatasourceImpl @Inject constructor(
             val registration = firestore
                 .collection(Constants.HOME_SCREEN_COLLECTION)
                 .document(Constants.CARD_LINKS)
+                .addSnapshotListener(listener)
+
+            awaitClose { registration.remove() }
+        }
+
+    override suspend fun getFooterUi(): Flow<FirestoreResult<FooterUi?>> =
+        callbackFlow {
+            val listener = EventListener<DocumentSnapshot> { snapshot, error ->
+                if (error != null) {
+                    trySend(FirestoreResult.Failure(error))
+                    // cancel() or cancel
+                    return@EventListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    val data = snapshot.toObject<FooterUi>()
+                    trySend(FirestoreResult.Success(data))
+                } else {
+                    trySend(FirestoreResult.Failure(Exception("Snapshot is not exist")))
+                }
+            }
+            val registration = firestore
+                .collection(Constants.HOME_SCREEN_COLLECTION)
+                .document(Constants.FOOTER)
                 .addSnapshotListener(listener)
 
             awaitClose { registration.remove() }
