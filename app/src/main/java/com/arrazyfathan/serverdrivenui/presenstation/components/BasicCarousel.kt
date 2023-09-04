@@ -19,8 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -44,6 +44,7 @@ import com.arrazyfathan.serverdrivenui.domain.model.NewsArticle
 import com.arrazyfathan.serverdrivenui.domain.model.listNewsArticles
 import com.arrazyfathan.serverdrivenui.presenstation.ui.theme.GoloSansRegular
 import com.arrazyfathan.serverdrivenui.presenstation.ui.theme.GoloSansSemiBold
+import com.arrazyfathan.serverdrivenui.utils.carouselTransition
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -56,7 +57,7 @@ import kotlinx.coroutines.launch
 fun BasicCarousel() {
     val articleItems = listNewsArticles
     val pageCount = listNewsArticles.size
-    val pagerState = rememberPagerState(pageCount)
+    val pagerState = rememberPagerState(0)
     var pageSelected by remember { mutableStateOf(0) }
     val isDragged by pagerState.interactionSource.collectIsDraggedAsState()
     val autoScrollDuration = 3000L
@@ -79,7 +80,7 @@ fun BasicCarousel() {
 
     Column {
         Text(
-            modifier = Modifier.padding(vertical = 16.dp, horizontal = 16.dp),
+            modifier = Modifier.padding(vertical = 0.dp, horizontal = 16.dp).padding(top = 24.dp),
             text = "Legends of Europe",
             color = Color.White,
             fontSize = 24.sp,
@@ -90,7 +91,7 @@ fun BasicCarousel() {
                 .padding(16.dp)
                 .height(240.dp)
                 .fillMaxWidth(),
-            shape = MaterialTheme.shapes.medium,
+            shape = RoundedCornerShape(28.dp),
             backgroundColor = Color.Transparent,
 
         ) {
@@ -105,10 +106,13 @@ fun BasicCarousel() {
                 ) { page ->
                     pageSelected = page
                     val articleItem = articleItems[page]
-                    CarouselItem(articleItem)
+                    CarouselItem(
+                        articleItem,
+                        modifier = Modifier.carouselTransition(pageSelected, pagerState),
+                    )
                 }
 
-                PageIndicator(
+                /*PageIndicator(
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
                         .padding(bottom = 16.dp),
@@ -118,7 +122,7 @@ fun BasicCarousel() {
                     selectedLength = 30.dp,
                     space = 4.dp,
                     animationDurationInMillis = 1000,
-                )
+                )*/
             }
         }
     }
@@ -211,8 +215,8 @@ fun PageIndicatorView(
 }
 
 @Composable
-fun CarouselItem(articleItem: NewsArticle) {
-    Box {
+fun CarouselItem(articleItem: NewsArticle, modifier: Modifier = Modifier) {
+    Box(modifier = modifier) {
         Image(
             painter = painterResource(id = articleItem.image),
             contentDescription = null,

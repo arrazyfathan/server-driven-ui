@@ -19,7 +19,7 @@ val listNewsArticles = listOf(
     ),
     NewsArticle(
         "Chelsea vs Bayern Munich: The Legends of Europe are coming to Stamford Bridge!",
-        R.drawable.example_images,
+        R.drawable.terry,
         "Later this year, join us at Stamford Bridge to see the Legends of Europe in action.",
     ),
     NewsArticle(
@@ -29,7 +29,7 @@ val listNewsArticles = listOf(
     ),
     NewsArticle(
         "Legends of Europe ticket details confirmed as Zola joins the team",
-        R.drawable.zola,
+        R.drawable.zola_1,
         "Tickets to see Chelsea take on Bayern Munich in the Legends of Europe game at Stamford Bridge will go on sale this week, with Gianfranco Zola the latest Blues hero revealed to be returning to the pitch in SW6.",
     ),
 )

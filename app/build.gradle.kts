@@ -66,6 +66,7 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.1")
     implementation("androidx.compose.runtime:runtime:1.4.3")
     implementation("androidx.compose.ui:ui:1.4.3")
+    implementation("androidx.compose.ui:ui-util:1.4.3")
     implementation("com.google.firebase:firebase-firestore-ktx:24.7.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
