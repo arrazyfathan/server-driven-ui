@@ -8,6 +8,15 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile =
+                file("/Users/gamatechno/Personal/Android/Project/ServerDrivenUI/keystore/keystore")
+            storePassword = "123456"
+            keyAlias = "server-driven-key"
+            keyPassword = "123456"
+        }
+    }
     namespace = "com.arrazyfathan.serverdrivenui"
     compileSdk = 33
 
@@ -31,6 +40,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -76,6 +86,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.5")
+
     /*implementation(platform("com.google.firebase:firebase-bom:32.2.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx:24.7.0")*/
@@ -104,4 +116,6 @@ dependencies {
     implementation("io.github.oleksandrbalan:textflow:1.1.1")
 
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+    implementation("com.github.skydoves:cloudy:0.1.2")
 }
